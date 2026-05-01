@@ -1,25 +1,21 @@
 FROM python:3.10-slim
 
-WORKDIR /app
-
-# Install system dependencies for audio processing and build tools
-RUN apt-get update && apt-get install -y ffmpeg build-essential 
-RUN rm -rf /var/lib/apt/lists/*
-
-# COPY requirements.txt .
-# RUN pip install --no-cache-dir -r requirements.txt
-COPY requirements.txt .
-RUN pip install --upgrade pip
-    # pip install --no-cache-dir -r requirements.txt
-
-RUN pip install --no-cache-dir boto3==1.34.0
-RUN pip install --no-cache-dir SQLAlchemy==2.0.23
-RUN pip install --no-cache-dir psycopg2-binary==2.9.9
+# Prevent interactive prompts during apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies (including PyAV requirements)
+# Set a consistent cache directory for HuggingFace and Whisper models
+# This ensures models downloaded during build are persisted in a known path
+ENV HF_HOME=/app/models
+
+WORKDIR /app
+
+# 1. Install system dependencies in a single layer
+# Includes audio processing (ffmpeg), database clients (libpq-dev), and PyAV requirements
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        build-essential \
+        ffmpeg \
+        libpq-dev \
         pkg-config \
         libavcodec-dev \
         libavformat-dev \
@@ -29,11 +25,19 @@ RUN apt-get update && \
         libswscale-dev \
         libswresample-dev && \
     rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir "av==12.0.0" --only-binary=:all:
-RUN pip install --no-cache-dir faster-whisper==0.10.0
-RUN pip install --no-cache-dir transformers==4.35.2
-RUN pip install --no-cache-dir torch==2.1.2
 
+# 2. Install Python dependencies via requirements.txt
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# 3. Pre-download models to bake them into the image
+# This ensures maximum stability as no models will be downloaded at runtime.
+COPY download_models.py .
+RUN python download_models.py
+
+# 4. Copy application source
 COPY main.py .
 
+# 5. Set default command
 CMD ["python", "-u", "main.py"]
