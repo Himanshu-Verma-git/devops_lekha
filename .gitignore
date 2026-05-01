@@ -50,3 +50,6 @@ terraform.rc
 .env
 secrets.tfvars
 !*.example
+
+# other
+docs/
