@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stt-worker
+  labels:
+    app: stt-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stt-worker
+  template:
+    metadata:
+      labels:
+        app: stt-worker
+    spec:
+      containers:
+      - name: stt-worker
+        image: lekha-stt-worker:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: AWS_REGION
+          value: "ap-south-1"
+        - name: S3_BUCKET_NAME
+          value: "lekha-audio-artifacts"
+        - name: SQS_QUEUE_URL
+          value: "https://sqs.ap-south-1.amazonaws.com/123456789012/lekha-audio-processing.fifo"
+        - name: POSTGRES_URL
+          value: "postgresql://lekhaadmin:change_me_in_prod123@lekha-db.xxxxxxxxx.ap-south-1.rds.amazonaws.com/lekhadb"
+        # For local Whisper models to be cached
+        - name: HF_HOME
+          value: "/tmp/hf_home"

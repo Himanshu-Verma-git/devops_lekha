@@ -1,0 +1,11 @@
+# Enable Long Filename Support for FAT
+CONFIG_FATFS_LFN_HEAP=y
+CONFIG_FATFS_LFN_NONE=n
+
+# Custom Partition Table to fit SSL Bundle
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+
+# Increase main task stack size (default 3584 is too small for sd_card_init + app_main)
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192

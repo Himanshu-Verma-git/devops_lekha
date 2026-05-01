@@ -1,0 +1,4 @@
+docker run --rm -it --device=/dev/ttyACM0 -v $PWD:/project -w /project lekha-voice-logger idf.py -p /dev/ttyACM0 flash monitor
+
+
+docker run --rm -it --privileged -v $PWD:/project -w /project lekha-voice-logger idf.py -p /dev/ttyACM0 flash monitor

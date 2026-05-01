@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekha - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
+        h1 { margin-bottom: 24px; color: #38bdf8; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #334155; border-radius: 6px; background: #0f172a; color: #fff; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #38bdf8; }
+        button { width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0284c7; color: #fff; }
+        .error { color: #f87171; margin-bottom: 20px; font-size: 0.9em; }
+        a { color: #38bdf8; text-decoration: none; font-size: 0.9em; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Lekha Login</h1>
+        <% if (error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <button type="submit">Log In</button>
+        </form>
+        <p style="margin-top: 20px;">Don't have an account? <a href="/signup">Sign up here</a></p>
+    </div>
+</body>
+</html>

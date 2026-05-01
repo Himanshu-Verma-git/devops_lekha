@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-consumer
+  labels:
+    app: mqtt-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-consumer
+  template:
+    metadata:
+      labels:
+        app: mqtt-consumer
+    spec:
+      containers:
+      - name: mqtt-consumer
+        image: lekha-mqtt-consumer:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MQTT_BROKER_URL
+          value: "mqtt-broker-svc.default.svc.cluster.local"
+        - name: AWS_REGION
+          value: "ap-south-1"
+        # The following env vars will be injected externally or IRSA
+        - name: S3_BUCKET_NAME
+          value: "lekha-audio-artifacts"
+        - name: SQS_QUEUE_URL
+          value: "https://sqs.ap-south-1.amazonaws.com/123456789012/lekha-audio-processing.fifo"

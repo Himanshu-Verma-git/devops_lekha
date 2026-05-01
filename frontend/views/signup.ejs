@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekha - Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
+        h1 { margin-bottom: 24px; color: #a78bfa; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #334155; border-radius: 6px; background: #0f172a; color: #fff; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #a78bfa; }
+        button { width: 100%; padding: 12px; background: #a78bfa; color: #0f172a; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #7c3aed; color: #fff; }
+        .error { color: #f87171; margin-bottom: 20px; font-size: 0.9em; }
+        .success { color: #34d399; margin-bottom: 20px; font-size: 0.9em; }
+        a { color: #a78bfa; text-decoration: none; font-size: 0.9em; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Register Device</h1>
+        <% if (error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+            <div class="success"><%= success %></div>
+        <% } %>
+        <form action="/signup" method="POST">
+            <input type="text" name="username" placeholder="Choose a Username" required>
+            <input type="text" name="device_id" placeholder="Device MAC Address (e.g. 00:1A:2B:3C:4D)" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p style="margin-top: 20px;">Already have an account? <a href="/login">Log in here</a></p>
+    </div>
+</body>
+</html>

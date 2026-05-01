@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekha Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        header { background-color: #1e293b; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        header h1 { margin: 0; color: #38bdf8; font-size: 1.5em; }
+        .user-info { font-size: 0.9em; color: #94a3b8; }
+        .logout { color: #f87171; text-decoration: none; margin-left: 15px; font-weight: 600; }
+        .logout:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #334155; }
+        th { background: #0f172a; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #334155; }
+        .tag { background: #38bdf8; color: #0f172a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; margin-right: 5px; display: inline-block;}
+        .empty-state { text-align: center; padding: 40px; color: #94a3b8; font-style: italic; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lekha Dashboard</h1>
+        <div class="user-info">
+            Welcome, <%= user.username %> (Device: <%= user.device_id %>)
+            <a href="/logout" class="logout">Logout</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Timestamp</th>
+                    <th>Transcription</th>
+                    <th>Extracted Tags</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(records.length === 0) { %>
+                    <tr>
+                        <td colspan="4" class="empty-state">No audio records found yet for your device. Start recording!</td>
+                    </tr>
+                <% } else { %>
+                    <% records.forEach(function(record) { %>
+                        <tr>
+                            <td>#<%= record.id %></td>
+                            <td><%= new Date(record.created_at).toLocaleString() %></td>
+                            <td style="max-width: 400px; line-height: 1.5;"><%= record.transcription %></td>
+                            <td>
+                                <% if(record.tags) { %>
+                                    <% record.tags.split(',').forEach(function(tag) { %>
+                                        <span class="tag"><%= tag.trim() %></span>
+                                    <% }); %>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
