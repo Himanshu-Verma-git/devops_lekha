@@ -75,13 +75,21 @@ esp_err_t wifi_connect(const char *ssid, const char *password) {
   strncpy((char *)wifi_config.sta.password, password,
           sizeof(wifi_config.sta.password) - 1);
   wifi_config.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
+  wifi_config.sta.pmf_cfg.capable = true;
+  wifi_config.sta.pmf_cfg.required = false;
 
   ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
 
   ESP_LOGI(TAG, "Connecting to %s...", ssid);
 
   // Start Wi-Fi (which triggers WIFI_EVENT_STA_START and auto-connects)
-  ESP_ERROR_CHECK(esp_wifi_start());
+  esp_err_t start_err = esp_wifi_start();
+  if (start_err == ESP_ERR_WIFI_STATE) {
+    // Wi-Fi is already started, manually trigger connection
+    esp_wifi_connect();
+  } else {
+    ESP_ERROR_CHECK(start_err);
+  }
 
   // Wait for connection
   EventBits_t bits =
