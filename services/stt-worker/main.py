@@ -24,7 +24,7 @@ print("Loading Whisper Model (tiny.en)...")
 whisper_model = WhisperModel("tiny.en", device="cpu", compute_type="int8")
 
 print("Loading Intent Classifier Model...")
-intent_classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+intent_classifier = pipeline("zero-shot-classification", model="/app/models/bart")
 
 
 def process_audio(device_id, s3_key, original_timestamp):

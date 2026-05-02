@@ -32,9 +32,10 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 3. Pre-download models to bake them into the image
-# This ensures maximum stability as no models will be downloaded at runtime.
+# We split these into separate layers and scripts to minimize memory pressure (exit code 137)
 COPY download_models.py .
-RUN python download_models.py
+RUN python download_models.py whisper
+RUN python download_models.py bart
 
 # 4. Copy application source
 COPY main.py .

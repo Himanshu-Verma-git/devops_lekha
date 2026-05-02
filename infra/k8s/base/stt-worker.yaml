@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: stt-worker
-        image: lekha-stt-worker:latest
+        image: complaintanonymous/lekha-stt-worker:latest
         imagePullPolicy: IfNotPresent
         resources:
           requests:

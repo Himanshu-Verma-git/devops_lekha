@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mqtt-consumer
-        image: lekha-mqtt-consumer:latest
+        image: complaintanonymous/lekha-mqtt-consumer:latest
         imagePullPolicy: IfNotPresent
         env:
         - name: MQTT_BROKER_URL
