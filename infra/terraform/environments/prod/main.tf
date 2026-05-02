@@ -15,6 +15,7 @@ module "vpc" {
 }
 
 # 2. EKS Cluster
+# 2. EKS Cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -25,9 +26,11 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  # REQUIRED for node group creation in v20+
+  cluster_endpoint_public_access = true # This line is correct
+
   enable_cluster_creator_admin_permissions = true
 
+  # YOU NEED TO RESTORE THIS BLOCK:
   eks_managed_node_groups = {
     general = {
       desired_size = 1
@@ -35,9 +38,7 @@ module "eks" {
       max_size     = 3
 
       instance_types = ["t3.medium"]
-
-      # CRITICAL FIX (EKS 1.29 compatibility)
-      ami_type = "AL2023_x86_64_STANDARD"
+      ami_type       = "AL2023_x86_64_STANDARD"
 
       iam_role_additional_policies = {
         app_policy = aws_iam_policy.node_app_policy.arn
@@ -45,6 +46,7 @@ module "eks" {
     }
   }
 }
+
 # module "eks" {
 #   source  = "terraform-aws-modules/eks/aws"
 #   version = "~> 20.0"
