@@ -1,6 +1,6 @@
 # Lekha - Intelligent Voice Activity Tracker
 
-Lekha is a state-of-the-art activity tracking system that captures audio at the edge, transmits it securely via MQTT, and leverages advanced AI for speech-to-text (STT) and intelligent categorization.
+Lekha is an  activity tracking system that captures audio at the edge, transmits it securely via MQTT, and leverages advanced AI for speech-to-text (STT) and intelligent categorization.
 
 ## 🚀 Intent
 The primary goal of Lekha is to provide a seamless, hands-free way to track activities. By using an ESP32-based edge device, users can record voice notes which are automatically transcribed and tagged with relevant categories (e.g., Work, Personal, Fitness) using AI, making activity logging effortless.
