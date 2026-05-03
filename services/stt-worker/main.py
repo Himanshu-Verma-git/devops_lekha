@@ -41,11 +41,15 @@ def process_audio(device_id, s3_key, original_timestamp):
     print(f"Transcription: {transcription}")
     
     # 3. Intent Inference
-    print("Running Intent inference...")
-    candidate_labels = ["question", "command", "statement", "greeting", "urgent"]
-    result = intent_classifier(transcription, candidate_labels)
-    tags = ",".join(result['labels'][:2]) # Get top 2 tags
-    print(f"Extracted tags: {tags}")
+    if transcription:
+        print("Running Intent inference...")
+        candidate_labels = ["question", "command", "statement", "greeting", "urgent"]
+        result = intent_classifier(transcription, candidate_labels)
+        tags = ",".join(result['labels'][:2]) # Get top 2 tags
+        print(f"Extracted tags: {tags}")
+    else:
+        print("Transcription is empty, skipping intent inference.")
+        tags = "none"
     
     # 4. Save to Database
     if engine:

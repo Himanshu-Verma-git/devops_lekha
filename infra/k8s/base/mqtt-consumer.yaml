@@ -25,6 +25,10 @@ spec:
           value: "ap-south-1"
         # The following env vars will be injected externally or IRSA
         - name: S3_BUCKET_NAME
-          value: "lekha-audio-artifacts"
-        - name: SQS_QUEUE_URL
-          value: "https://sqs.ap-south-1.amazonaws.com/123456789012/lekha-audio-processing.fifo"
+          value: "lekha-audio-artifacts-20260503065555463700000003"
+        - name: SQS_QUEUE_URL 
+          value: "https://sqs.ap-south-1.amazonaws.com/017118230217/lekha-audio-processing.fifo"
+      tolerations:
+      - key: "node.kubernetes.io/disk-pressure"
+        operator: "Exists"
+        effect: "NoSchedule"

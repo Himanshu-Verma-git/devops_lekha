@@ -37,8 +37,9 @@ module "eks" {
       min_size     = 1
       max_size     = 3
 
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.large"]
       ami_type       = "AL2023_x86_64_STANDARD"
+      disk_size      = 50
 
       iam_role_additional_policies = {
         app_policy = aws_iam_policy.node_app_policy.arn

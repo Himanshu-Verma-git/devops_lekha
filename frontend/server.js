@@ -7,9 +7,14 @@ const app = express();
 const port = process.env.PORT || 80;
 
 // Database Connection
-// Connection string example: postgresql://lekhaadmin:change_me_in_prod123@lekha-db.xxxxxxxxx.ap-south-1.rds.amazonaws.com/lekhadb
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL || 'postgresql://lekhaadmin:change_me_in_prod123@localhost/lekhadb'
+  connectionString: process.env.POSTGRES_URL || 'postgresql://lekhaadmin:change_me_in_prod123@localhost/lekhadb',
+  ssl: (process.env.POSTGRES_URL && process.env.POSTGRES_URL.includes('rds.amazonaws.com')) ? { rejectUnauthorized: false } : false
+});
+
+// Log connection errors
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err);
 });
 
 // Middleware
@@ -78,6 +83,7 @@ app.post('/login', async (req, res) => {
             res.render('login', { error: 'Invalid Username. Try signing up.' });
         }
     } catch (e) {
+        console.error("Login error:", e);
         res.render('login', { error: 'Database error occurred.' });
     }
 });
@@ -92,6 +98,7 @@ app.post('/signup', async (req, res) => {
         await pool.query('INSERT INTO users (username, device_id) VALUES ($1, $2)', [username, device_id]);
         res.render('signup', { error: null, success: 'Signup successful! You can now log in.' });
     } catch (e) {
+        console.error("Signup error:", e);
         if (e.code === '23505') {
             res.render('signup', { error: 'Username or Device ID already exists.', success: null });
         } else {
@@ -111,6 +118,7 @@ app.get('/dashboard', isAuthenticated, async (req, res) => {
         const result = await pool.query('SELECT * FROM records WHERE user_id = $1 ORDER BY id DESC', [user.id]);
         res.render('dashboard', { user: user, records: result.rows });
     } catch (e) {
+        console.error("Dashboard error:", e);
         res.send("Error fetching dashboard data.");
     }
 });

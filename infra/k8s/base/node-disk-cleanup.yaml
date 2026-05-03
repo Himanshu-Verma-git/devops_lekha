@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-disk-cleanup
+  namespace: default
+spec:
+  tolerations:
+  - key: "node.kubernetes.io/disk-pressure"
+    operator: "Exists"
+    effect: "NoSchedule"
+  hostPID: true
+  hostIPC: true
+  hostNetwork: true
+  restartPolicy: Never
+  containers:
+  - name: cleaner
+    image: amazonlinux:2
+    securityContext:
+      privileged: true
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "=== Disk usage before ==="
+      df -h /
+      echo ""
+      echo "=== Pruning containerd images (unused) ==="
+      nsenter -t 1 -m -u -i -n -p -- crictl rmi --prune
+      echo ""
+      echo "=== Disk usage after ==="
+      df -h /
+    volumeMounts:
+    - name: host-root
+      mountPath: /host
+  volumes:
+  - name: host-root
+    hostPath:
+      path: /

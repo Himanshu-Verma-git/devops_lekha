@@ -17,20 +17,23 @@ spec:
       containers:
       - name: stt-worker
         image: complaintanonymous/lekha-stt-worker:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "1Gi"
             cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
         env:
         - name: AWS_REGION
           value: "ap-south-1"
         - name: S3_BUCKET_NAME
-          value: "lekha-audio-artifacts"
+          value: "lekha-audio-artifacts-20260503065555463700000003"
         - name: SQS_QUEUE_URL
-          value: "https://sqs.ap-south-1.amazonaws.com/123456789012/lekha-audio-processing.fifo"
+          value: "https://sqs.ap-south-1.amazonaws.com/017118230217/lekha-audio-processing.fifo"
         - name: POSTGRES_URL
-          value: "postgresql://lekhaadmin:change_me_in_prod123@lekha-db.xxxxxxxxx.ap-south-1.rds.amazonaws.com/lekhadb"
-        # For local Whisper models to be cached
+          value: "postgresql://lekhaadmin:Tx123456789@lekha-db.c3wuoi0ieozi.ap-south-1.rds.amazonaws.com:5432/lekhadb"
+        # For local Whisper models to be cached during build
         - name: HF_HOME
           value: "/tmp/hf_home"
