@@ -11,6 +11,7 @@ firmware/venv/
 *.tfstate.*
 crash.log
 *.tfvars
+!*.tfvars.example
 *.tfvars.json
 override.tf
 override.tf.json
@@ -49,7 +50,13 @@ terraform.rc
 *.swn
 .env
 secrets.tfvars
-!*.example
 firmware.zip
-# other
+docs/deployment.md
+
+# --- Example/Sample files (Allow these) ---
+!*.example
+!**/*.example
+!**/secrets.h.example
+
+# --- Project Specific ---
 docs/
